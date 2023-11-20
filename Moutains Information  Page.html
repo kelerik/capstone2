@@ -3,25 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mountains</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>Mountain Information</title>
 
     <!-- FIRST LOAD ALL THE MOUNTAINS LIKE THIS -->
     <script src="./scripts/mountainData.js"></script>
 
+
 </head>
 <body>
-   <center><h1>Mountains</h1> </center> 
-   <a href="National Parks Search Page.html"><button>National Park</button> </a>
-   <a href="index.html"><button>Home Page</button> </a>
+   <center><h1>Mountain Information</h1> </center> 
+
+   
+   <div class="w3-container">
+
+  
+    <div class="w3-bar w3-black">
+      <a href="index.html" class="w3-bar-item w3-hover-green">Home</a>
+      <a href="National Parks Search Page.html" class="w3-bar-item w3-hover-green">National Parks</a>
+     
+    </div>
+   
+  
     <!-- THIRD MAKE A PLACE FOR THE MOUNTAIN LIST AND A DEFAULT OPTION -->
     <select id="list"><option value="">Select a Mountain</option></select>
+    
 
     <!-- FIFTH ADD TARGET FOR RESULTS -->
     <p id="results"></p>
+    <style>
+        body {
+          margin: 0;
+          font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        .navbar {
+          overflow: hidden;
+          background-color: #333;
+          position: fixed;
+          bottom: 0;
+          width: 100%;
+        }
+        
+        .navbar a {
+          float: left;
+          display: block;
+          color: #f2f2f2;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+          font-size: 17px;
+        }
+        
+        .navbar a:hover {
+          background: #f1f1f1;
+          color: black;
+        }
+        
+        .navbar a.active {
+          background-color: #04AA6D;
+          color: white;
+        }
+        
+        .main {
+          padding: 16px;
+          margin-bottom: 30px;
+        }
+        </style>
+        </head>
+        <body style="background-color:paleturquoise;">
+        
+        <div class="navbar">
+          <a href="index.html" class="active">Home</a>
+          <a href="National Parks Search Page.html">National Park</a>
+          
+        </div>
+        
+        <div class="main">
+          
+        </div>
+        
+        </body>
 </body>
 <script>
     // SECOND MAKE SURE DATA IS LOADED LIKE THIS
     document.body.innerHTML += mountainsArray.length; //We should se 48 in the show preview
+    
 
     // FOURTH LOOP THROUGH ALL DATA AND ADD A NEW OPTION FOR EACH TO THE SELECT
     mountainsArray.forEach(mountain => { //USE FOR EACH METHOD OF THE DATA TO GET 1 AT A TIME IN ARROW FUNCTION
@@ -31,13 +98,26 @@
     }); //END FOR EACH
 
     // SIXTH - LISTEN FOR LIST CHANGE SELECTION
-    list.addEventListener("change", event=>{ 
-        let mountain = mountainsArray.find(m=>m.name == event.target.value); //FIND DATA
+    list.addEventListener("change", async event=>{ 
+        let mountain = mountainsArray.find(m=>m.name == event.target.value);
+        //FIND DATA
         results.innerHTML = `<h1>${mountain.name}</h1>`; //SHOW RESULTS
         results.innerHTML += mountain.desc;
         results.innerHTML += `<h3>Elevation: ${mountain.elevation} feet</h3>`; 
         results.innerHTML += `<h3>Effort: ${mountain.effort}</h3>`; 
         results.innerHTML += `<img src="./images/${mountain.img}">`;
+        try {
+                    const { sunrise, sunset } = await getSunsetForMountain(mountain.lat, mountain.lng);
+                    mountainInfoElement.innerHTML += `<p>Sunrise: ${sunrise}</p>`;
+                    mountainInfoElement.innerHTML += `<p>Sunset: ${sunset}</p>`;
+                } catch (error) {
+                    console.error("Error fetching sunrise/sunset times", error);
+                    mountainInfoElement.innerHTML += `<p>Error fetching sunrise/sunset times</p>`;
+                }
+              
+
     }); //END LISTENER
 </script>
+
+
 </html>
